@@ -11,6 +11,7 @@ class HrZonesView extends WatchUi.DataField {
     hidden var curHr = 0;
     hidden var avgHr = 0;
     hidden var hrZones = new Histogram5();
+    hidden var tolerance = 3; // to show the curent hear rate in a different color
 
     hidden var x = 0;
     hidden var width = 200;
@@ -76,7 +77,13 @@ class HrZonesView extends WatchUi.DataField {
         var text = textOf(curHr);
         var font = Graphics.FONT_NUMBER_MILD;
         var sz = dc.getTextDimensions(text, font);
-        dc.setColor(Graphics.COLOR_DK_GREEN, Graphics.COLOR_TRANSPARENT);
+        if (avgHr > curHr + tolerance && curHr > 0) {
+            dc.setColor(Graphics.COLOR_DK_GREEN, Graphics.COLOR_TRANSPARENT);
+        } else if (avgHr < curHr + tolerance && curHr > 0) {
+            dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_TRANSPARENT);
+        } else {
+            dc.setColor(textColor, backgroundColor);
+        }
         dc.drawText(width2, y + height - sz[1], font, text, RIGHT_BOTTOM);
 
         // average heart rate

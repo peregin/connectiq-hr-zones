@@ -78,6 +78,9 @@ class Histogram5 {
             if (i == curBucket) {
                 dc.setColor(textColor, Graphics.COLOR_TRANSPARENT);
                 dc.fillRectangle(bX, y + barH + 1, barW, 2);
+            } else {
+                dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+                dc.fillRectangle(bX, y + barH + 1, barW, 1);
             }
         }
 
