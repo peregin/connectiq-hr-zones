@@ -77,7 +77,7 @@ class Histogram5 {
             // highlight the current zone
             if (i == curBucket) {
                 dc.setColor(textColor, Graphics.COLOR_TRANSPARENT);
-                dc.fillRectangle(bX, y + barH + 1, barW, 2);
+                dc.fillRectangle(bX, y + barH + 1, barW, 3);
             } else {
                 dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
                 dc.fillRectangle(bX, y + barH + 1, barW, 1);
