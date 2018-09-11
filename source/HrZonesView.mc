@@ -76,7 +76,7 @@ class HrZonesView extends WatchUi.DataField {
 
         // current heart rate
         var text = textOf(curHr);
-        var font = Graphics.FONT_NUMBER_MEDIUM;
+        var font = Graphics.FONT_NUMBER_MILD;
         var sz = dc.getTextDimensions(text, font);
         if (curHr > avgHr + tolerance && curHr > 0) {
             dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_TRANSPARENT);
@@ -85,7 +85,7 @@ class HrZonesView extends WatchUi.DataField {
         } else {
             dc.setColor(textColor, backgroundColor);
         }
-        dc.drawText(width3 * 2, y + height - sz[1] + 4, font, text, RIGHT_BOTTOM);
+        dc.drawText(width3 * 2, y + height - sz[1] + 5, font, text, RIGHT_BOTTOM);
 
         // average heart rate
         text = textOf(avgHr);
