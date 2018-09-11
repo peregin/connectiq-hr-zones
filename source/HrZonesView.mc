@@ -26,6 +26,7 @@ class HrZonesView extends WatchUi.DataField {
     function initialize() {
         DataField.initialize();
 
+        // use age to calculate max HR or make it editable for this data field.
         var profile = UserProfile.getProfile();
         var age = Gregorian.info(Time.now(), Time.FORMAT_SHORT).year - profile.birthYear;
         System.println("age is " + age);
@@ -77,10 +78,10 @@ class HrZonesView extends WatchUi.DataField {
         var text = textOf(curHr);
         var font = Graphics.FONT_NUMBER_MILD;
         var sz = dc.getTextDimensions(text, font);
-        if (avgHr > curHr + tolerance && curHr > 0) {
-            dc.setColor(Graphics.COLOR_DK_GREEN, Graphics.COLOR_TRANSPARENT);
-        } else if (avgHr < curHr + tolerance && curHr > 0) {
+        if (curHr > avgHr + tolerance && curHr > 0) {
             dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_TRANSPARENT);
+        } else if (curHr < avgHr - tolerance && curHr > 0) {
+            dc.setColor(Graphics.COLOR_DK_GREEN, Graphics.COLOR_TRANSPARENT);
         } else {
             dc.setColor(textColor, backgroundColor);
         }
