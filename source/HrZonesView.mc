@@ -16,6 +16,7 @@ class HrZonesView extends WatchUi.DataField {
     hidden var x = 0;
     hidden var width = 200;
     hidden var width2 = width/2;
+    hidden var width3 = width/3;
     hidden var y = 0;
     hidden var height = 53;
 
@@ -76,7 +77,7 @@ class HrZonesView extends WatchUi.DataField {
 
         // current heart rate
         var text = textOf(curHr);
-        var font = Graphics.FONT_NUMBER_MILD;
+        var font = Graphics.FONT_NUMBER_MEDIUM;
         var sz = dc.getTextDimensions(text, font);
         if (curHr > avgHr + tolerance && curHr > 0) {
             dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_TRANSPARENT);
@@ -85,20 +86,20 @@ class HrZonesView extends WatchUi.DataField {
         } else {
             dc.setColor(textColor, backgroundColor);
         }
-        dc.drawText(width2, y + height - sz[1], font, text, RIGHT_BOTTOM);
+        dc.drawText(width3, y + height - sz[1] + 4, font, text, RIGHT_BOTTOM);
 
         // average heart rate
         text = textOf(avgHr);
         font = Graphics.FONT_MEDIUM;
         dc.setColor(textColor, backgroundColor);
-        dc.drawText(width2 + 2, y + height - sz[1], font, text, LEFT_BOTTOM);
+        dc.drawText(width3 + 2, y + height - sz[1] + 4, font, text, LEFT_BOTTOM);
 
         // draw the unit
         text = "bpm";
         font = Graphics.FONT_SYSTEM_XTINY;
         sz = dc.getTextDimensions(text, font);
         dc.setColor(unitColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(width2 + 4, y + height - sz[1] - 2, font, text, LEFT_BOTTOM);
+        dc.drawText(width3 + 4, y + height - sz[1] - 2, font, text, LEFT_BOTTOM);
 
         hrZones.draw(dc, x + 2, y + 1, width - 4, height / 4);
     }
