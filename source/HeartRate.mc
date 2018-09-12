@@ -1,3 +1,7 @@
+using Toybox.UserProfile as UserProfile;
+using Toybox.Time.Gregorian as Gregorian;
+using Toybox.Time;
+using Toybox.System;
 
 /**
  *
@@ -13,8 +17,38 @@
  */
 class HeartRate {
 
-    static function lowerThresholdsForAge(age) {
-        var lowerThreshold = [0, 120, 140, 160, 180];
+    static function getAge() {
+        // use age to calculate max HR or make it editable for this data field.
+        var profile = UserProfile.getProfile();
+        if (profile != null) {
+            return Gregorian.info(Time.now(), Time.FORMAT_SHORT).year - profile.birthYear;
+        } else {
+            return 40;
+        }
+    }
+
+    static function maxHr(age) {
+        return 220 - age;
+    }
+
+    static function threshold(age, factor) {
+        return (age * factor).toLong();
+    }
+
+    static function lowerThresholdsForAge(maxHr) {
+        var lowerThreshold = [
+            0,
+            threshold(maxHr, 0.58),
+            threshold(maxHr, 0.77),
+            threshold(maxHr, 0.86),
+            threshold(maxHr, 0.96)
+        ];
         return lowerThreshold;
+    }
+
+    static function printThresholds(thresholds) {
+        for (var i = 0; i < thresholds.size(); i++) {
+           System.println("zone[" + (i+1) + "]=" + thresholds[i]);
+        }
     }
 }

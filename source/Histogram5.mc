@@ -1,4 +1,5 @@
 using Toybox.Graphics;
+
 /**
  * Collects data periodically (at each second) in 5 zones.
  */
@@ -17,6 +18,10 @@ class Histogram5 {
 
     hidden var curValue = 0;
     var textColor = Graphics.COLOR_BLACK;
+
+    function setThresholds(thresholds) {
+        bucketMinThreshold = thresholds;
+    }
 
     // invoked periodically each second
     function add(value) {

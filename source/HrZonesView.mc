@@ -1,6 +1,4 @@
 using Toybox.WatchUi;
-using Toybox.Time.Gregorian as Gregorian;
-using Toybox.UserProfile as UserProfile;
 
 class HrZonesView extends WatchUi.DataField {
 
@@ -26,10 +24,12 @@ class HrZonesView extends WatchUi.DataField {
     function initialize() {
         DataField.initialize();
 
-        // use age to calculate max HR or make it editable for this data field.
-        var profile = UserProfile.getProfile();
-        var age = Gregorian.info(Time.now(), Time.FORMAT_SHORT).year - profile.birthYear;
-        System.println("age is " + age);
+        var age = HeartRate.getAge();
+        var maxHr = HeartRate.maxHr(age);
+        System.println("age is " + age + ", max HR is " + maxHr);
+        var thresholds = HeartRate.lowerThresholdsForAge(maxHr);
+        HeartRate.printThresholds(thresholds);
+        hrZones.setThresholds(thresholds);
     }
 
     // See Activity.Info in the documentation for available information.
