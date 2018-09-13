@@ -38,9 +38,9 @@ class HeartRate {
     static function lowerThresholdsForAge(maxHr) {
         var lowerThreshold = [
             0,
-            threshold(maxHr, 0.58),
-            threshold(maxHr, 0.77),
-            threshold(maxHr, 0.86),
+            threshold(maxHr, 0.59),
+            threshold(maxHr, 0.78),
+            threshold(maxHr, 0.87),
             threshold(maxHr, 0.96)
         ];
         return lowerThreshold;

@@ -42,7 +42,7 @@ class Histogram5 {
             return 0;
         }
         var bucket = 0;
-        while (bucket < bucketMinThreshold.size() && value > bucketMinThreshold[bucket]) {
+        while (bucket < bucketMinThreshold.size() && value >= bucketMinThreshold[bucket]) {
             bucket++;
         }
         return bucket - 1;
