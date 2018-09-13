@@ -17,6 +17,8 @@ class Histogram5 {
     ];
 
     hidden var curValue = 0;
+    hidden var curBucket = 0;
+
     var textColor = Graphics.COLOR_BLACK;
 
     function setThresholds(thresholds) {
@@ -26,8 +28,12 @@ class Histogram5 {
     // invoked periodically each second
     function add(value) {
         curValue = value;
-        var bucket = getBucketFor(curValue);
-        secondsInBucket[bucket] += 1;
+        curBucket = getBucketFor(curValue);
+        secondsInBucket[curBucket] += 1;
+    }
+
+    function getCurrentBucket() {
+        return curBucket;
     }
 
     // bucket value is a range betwen 0 -> 4
@@ -55,7 +61,6 @@ class Histogram5 {
     function draw(dc, x, y, w, h) {
         var zones = secondsInBucket.size();
         var maxBucket = getMaxBucket();
-        var curBucket = getBucketFor(curValue);
         var spaceF = 0.2;
         var barH = h;
         var barW = (w / (zones * (1 + spaceF))).toLong();
@@ -78,9 +83,6 @@ class Histogram5 {
                 dc.fillRectangle(bX, y + barH + 1, barW, 1);
             }
         }
-
-
-
     }
 
     (:test)
