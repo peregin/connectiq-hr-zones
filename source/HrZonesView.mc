@@ -12,10 +12,12 @@ class HrZonesView extends WatchUi.DataField {
     hidden var tolerance = 3; // to show the curent hear rate in a different color
 
     hidden var x = 0;
-    hidden var width = 200;
+    hidden var width = 200; // it is recalculated in onLayout
+    hidden var width2 = width/2;
     hidden var width23 = width*2/3;
     hidden var y = 0;
-    hidden var height = 53;
+    hidden var height = 50; // it is recalculated in onLayout
+    hidden var isWide = false; // when the data field is wider than 100 pixels the layout will be different
 
     hidden var backgroundColor = Graphics.COLOR_WHITE;
     hidden var textColor = Graphics.COLOR_BLACK;
@@ -61,7 +63,10 @@ class HrZonesView extends WatchUi.DataField {
         width = dc.getWidth();
         y = 0;
         height = dc.getHeight();
+        width2 = width/2;
         width23 = width*2/3;
+        isWide = width > 100; // wider than 100 pixels
+        System.println("size is [" + width + "," + height + "] wide = " + isWide);
 
         onUpdate(dc);
     }
@@ -85,22 +90,34 @@ class HrZonesView extends WatchUi.DataField {
         } else {
             dc.setColor(textColor, backgroundColor);
         }
-        dc.drawText(width23, y + height - curHrSize[1] + 5, font, text, RIGHT_BOTTOM);
+        var splitLeft = isWide ? width2 : width23;
+        dc.drawText(splitLeft, y + height - curHrSize[1] + 5, font, text, RIGHT_BOTTOM);
+        var splitRight = isWide ? width2 + 15 : width23;
 
         // average heart rate
         text = textOf(avgHr);
         font = Graphics.FONT_MEDIUM;
         dc.setColor(textColor, backgroundColor);
-        dc.drawText(width23 + 2, y + height - curHrSize[1] + 4, font, text, LEFT_BOTTOM);
+        dc.drawText(splitRight + 2, y + height - curHrSize[1] + 4, font, text, LEFT_BOTTOM);
 
         // draw the unit
         text = "bpm";
         font = Graphics.FONT_SYSTEM_XTINY;
         var unitSize = dc.getTextDimensions(text, font);
         dc.setColor(unitColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(width23 + 4, y + height - unitSize[1] - 2, font, text, LEFT_BOTTOM);
+        dc.drawText(splitRight + 4, y + height - unitSize[1] - 2, font, text, LEFT_BOTTOM);
 
-        hrZones.draw(dc, x + 2, y + 1, width - 4, height - curHrSize[1] - 2);
+        // draw the historgram
+        var hrZoneWidth = isWide ? width - 4 : width - unitSize[0];
+        hrZones.draw(dc, x + 2, y + 1, hrZoneWidth, height - curHrSize[1] - 2);
+
+        // draw current zone
+        var zx = isWide ? splitLeft + width2/2 + 4 : x + hrZoneWidth;
+        var zy = isWide ? y + height - curHrSize[1] + 4 : y + 1;
+        font = isWide ? Graphics.FONT_MEDIUM : Graphics.FONT_SYSTEM_TINY;
+        dc.setColor(textColor, backgroundColor);
+        dc.drawText(zx, zy, font, "Z" + (hrZones.getCurrentBucket() + 1), LEFT_BOTTOM);
+
     }
 
     function textOf(hr) {
