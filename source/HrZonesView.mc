@@ -19,6 +19,7 @@ class HrZonesView extends WatchUi.DataField {
     hidden var height = 50; // it is recalculated in onLayout
     hidden var isWide = false; // when the data field is wider than 100 pixels the layout will be different
 
+    hidden var hasBackgroundColorOption = false;
     hidden var backgroundColor = Graphics.COLOR_WHITE;
     hidden var textColor = Graphics.COLOR_BLACK;
     hidden var unitColor = 0x444444;
@@ -26,12 +27,42 @@ class HrZonesView extends WatchUi.DataField {
     function initialize() {
         DataField.initialize();
 
+        hasBackgroundColorOption = (self has :getBackgroundColor);
+        System.println("has background color = " + hasBackgroundColorOption);
+
         var age = HeartRate.getAge();
         var maxHr = HeartRate.maxHr(age);
         System.println("age is " + age + ", max HR is " + maxHr);
         var thresholds = HeartRate.lowerThresholdsForAge(maxHr);
         HeartRate.printThresholds(thresholds);
         hrZones.setThresholds(thresholds);
+    }
+
+    function onLayout(dc) {
+        if (hasBackgroundColorOption) {
+            backgroundColor = getBackgroundColor();
+            if (backgroundColor == Graphics.COLOR_BLACK) {
+                // night
+                textColor = Graphics.COLOR_WHITE;
+                unitColor = Graphics.COLOR_LT_GRAY;
+            } else {
+                // daylight
+                textColor = Graphics.COLOR_BLACK;
+                unitColor = 0x444444;
+            }
+        }
+        hrZones.textColor = textColor;
+
+        x = 0;
+        width = dc.getWidth();
+        y = 0;
+        height = dc.getHeight();
+        width2 = width/2;
+        width23 = width*2/3;
+        isWide = width > 100; // wider than 100 pixels
+        //System.println("size is [" + width + "," + height + "] wide = " + isWide);
+
+        onUpdate(dc);
     }
 
     // See Activity.Info in the documentation for available information.
@@ -46,30 +77,6 @@ class HrZonesView extends WatchUi.DataField {
         }
     }
 
-    function onLayout(dc) {
-        backgroundColor = getBackgroundColor();
-        if (backgroundColor == Graphics.COLOR_BLACK) {
-            // night
-            textColor = Graphics.COLOR_WHITE;
-            unitColor = Graphics.COLOR_LT_GRAY;
-        } else {
-            // daylight
-            textColor = Graphics.COLOR_BLACK;
-            unitColor = 0x444444;
-        }
-        hrZones.textColor = textColor;
-
-        x = 0;
-        width = dc.getWidth();
-        y = 0;
-        height = dc.getHeight();
-        width2 = width/2;
-        width23 = width*2/3;
-        isWide = width > 100; // wider than 100 pixels
-        System.println("size is [" + width + "," + height + "] wide = " + isWide);
-
-        onUpdate(dc);
-    }
 
     // Display the value you computed here. This will be called once a second when the data field is visible.
     //
@@ -108,7 +115,7 @@ class HrZonesView extends WatchUi.DataField {
         dc.drawText(splitRight + 4, y + height - unitSize[1] - 2, font, text, LEFT_BOTTOM);
 
         // draw the historgram
-        var hrZoneWidth = isWide ? width - 4 : width - unitSize[0];
+        var hrZoneWidth = isWide ? width : width - unitSize[0];
         hrZones.draw(dc, x + 2, y + 1, hrZoneWidth, height - curHrSize[1] - 2);
 
         // draw current zone

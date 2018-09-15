@@ -65,12 +65,13 @@ class Histogram5 {
         var barH = h;
         var barW = (w / (zones * (1 + spaceF))).toLong();
         var barGap = (spaceF * barW).toLong();
+        var barGap2 = barGap / 2;
 
         dc.setPenWidth(1);
         for (var i = 0; i < zones; i++) {
             var bucketF = maxBucket == 0 ? 0 : secondsInBucket[i].toFloat() / maxBucket;
             var bH = (bucketF * barH).toLong();
-            var bX = x + (barW + barGap) * i;
+            var bX = x + barGap2 + (barW + barGap) * i;
             dc.setColor(bucketColors[i], Graphics.COLOR_TRANSPARENT);
             dc.fillRectangle(bX, y + barH - bH, barW, bH);
 
