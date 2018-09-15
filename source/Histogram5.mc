@@ -8,7 +8,7 @@ class Histogram5 {
     // generic for heart rate (0 -> [0, 120], 1 -> [120, 140], ...)
     hidden var bucketMinThreshold = [0, 120, 140, 160, 180];
     hidden var secondsInBucket = [0, 0, 0, 0, 0];
-    hidden var bucketColors = [
+    var bucketColor = [
         Graphics.COLOR_BLUE,
         Graphics.COLOR_GREEN,
         Graphics.COLOR_YELLOW,
@@ -72,7 +72,7 @@ class Histogram5 {
             var bucketF = maxBucket == 0 ? 0 : secondsInBucket[i].toFloat() / maxBucket;
             var bH = (bucketF * barH).toLong();
             var bX = x + barGap2 + (barW + barGap) * i;
-            dc.setColor(bucketColors[i], Graphics.COLOR_TRANSPARENT);
+            dc.setColor(bucketColor[i], Graphics.COLOR_TRANSPARENT);
             dc.fillRectangle(bX, y + barH - bH, barW, bH);
 
             // highlight the current zone

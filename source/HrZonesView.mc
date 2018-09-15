@@ -122,8 +122,9 @@ class HrZonesView extends WatchUi.DataField {
         var zx = isWide ? splitLeft + width2/2 + 4 : x + hrZoneWidth;
         var zy = isWide ? y + height - curHrSize[1] + 4 : y + 1;
         font = isWide ? Graphics.FONT_MEDIUM : Graphics.FONT_SYSTEM_TINY;
-        dc.setColor(textColor, backgroundColor);
-        dc.drawText(zx, zy, font, "Z" + (hrZones.getCurrentBucket() + 1), LEFT_BOTTOM);
+        var currentZone = hrZones.getCurrentBucket();
+        dc.setColor(hrZones.bucketColor[currentZone], backgroundColor);
+        dc.drawText(zx, zy, font, "Z" + (currentZone + 1), LEFT_BOTTOM);
 
     }
 
