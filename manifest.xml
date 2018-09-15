@@ -5,6 +5,9 @@
 
         <iq:products>
             <iq:product id="edge820"/>
+            <iq:product id="edge_520"/>
+            <iq:product id="edge_1000"/>
+            <iq:product id="fr735xt"/>
         </iq:products>
 
         <iq:permissions>

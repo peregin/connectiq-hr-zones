@@ -8,9 +8,11 @@ class Histogram5 {
     // generic for heart rate (0 -> [0, 120], 1 -> [120, 140], ...)
     hidden var bucketMinThreshold = [0, 120, 140, 160, 180];
     hidden var secondsInBucket = [0, 0, 0, 0, 0];
+    // TODO: test data, comment it out!!!
+    //hidden var secondsInBucket = [30, 50, 60, 40, 10];
     var bucketColor = [
         Graphics.COLOR_BLUE,
-        Graphics.COLOR_GREEN,
+        Graphics.COLOR_DK_GREEN,
         Graphics.COLOR_YELLOW,
         Graphics.COLOR_ORANGE,
         Graphics.COLOR_RED

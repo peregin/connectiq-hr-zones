@@ -20,6 +20,7 @@ class HrZonesView extends WatchUi.DataField {
     hidden var isWide = false; // when the data field is wider than 100 pixels the layout will be different
 
     hidden var hasBackgroundColorOption = false;
+    hidden var obscurity = 0; // non-rectangular screens have certain portions of the screen obscured.
     hidden var backgroundColor = Graphics.COLOR_WHITE;
     hidden var textColor = Graphics.COLOR_BLACK;
     hidden var unitColor = 0x444444;
@@ -53,13 +54,7 @@ class HrZonesView extends WatchUi.DataField {
         }
         hrZones.textColor = textColor;
 
-        x = 0;
-        width = dc.getWidth();
-        y = 0;
-        height = dc.getHeight();
-        width2 = width/2;
-        width23 = width*2/3;
-        isWide = width > 100; // wider than 100 pixels
+        calculateSize(dc);
         //System.println("size is [" + width + "," + height + "] wide = " + isWide);
 
         onUpdate(dc);
@@ -79,7 +74,6 @@ class HrZonesView extends WatchUi.DataField {
 
 
     // Display the value you computed here. This will be called once a second when the data field is visible.
-    //
     // Resolution, WxH	200 x 265 pixels for both 520 and 820
     function onUpdate(dc) {
         // clear background
@@ -97,9 +91,9 @@ class HrZonesView extends WatchUi.DataField {
         } else {
             dc.setColor(textColor, backgroundColor);
         }
-        var splitLeft = isWide ? width2 : width23;
+        var splitLeft = isWide || obscurity > 0 ? width2 : width23;
         dc.drawText(splitLeft, y + height - curHrSize[1] + 5, font, text, RIGHT_BOTTOM);
-        var splitRight = isWide ? width2 + 15 : width23;
+        var splitRight = isWide || obscurity > 0 ? width2 + 15 : width23;
 
         // average heart rate
         text = textOf(avgHr);
@@ -108,27 +102,60 @@ class HrZonesView extends WatchUi.DataField {
         dc.drawText(splitRight + 2, y + height - curHrSize[1] + 4, font, text, LEFT_BOTTOM);
 
         // draw the unit
-        text = "bpm";
-        font = Graphics.FONT_SYSTEM_XTINY;
-        var unitSize = dc.getTextDimensions(text, font);
-        dc.setColor(unitColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(splitRight + 4, y + height - unitSize[1] - 2, font, text, LEFT_BOTTOM);
+        var zoneWidth = 0;
+        if (obscurity == 0) {
+            text = "bpm";
+            font = Graphics.FONT_SYSTEM_XTINY;
+            var unitSize = dc.getTextDimensions(text, font);
+            dc.setColor(unitColor, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(splitRight + 4, y + height - unitSize[1] - 2, font, text, LEFT_BOTTOM);
+            zoneWidth = unitSize[0];
+        }
 
         // draw the historgram
-        var hrZoneWidth = isWide ? width : width - unitSize[0];
+        var hrZoneWidth = isWide ? width : width - zoneWidth;
         hrZones.draw(dc, x + 2, y + 1, hrZoneWidth, height - curHrSize[1] - 2);
 
         // draw current zone
-        var zx = isWide ? splitLeft + width2/2 + 4 : x + hrZoneWidth;
-        var zy = isWide ? y + height - curHrSize[1] + 4 : y + 1;
-        font = isWide ? Graphics.FONT_MEDIUM : Graphics.FONT_SYSTEM_TINY;
-        var currentZone = hrZones.getCurrentBucket();
-        dc.setColor(hrZones.bucketColor[currentZone], backgroundColor);
-        dc.drawText(zx, zy, font, "Z" + (currentZone + 1), LEFT_BOTTOM);
-
+        if (obscurity == 0) {
+            var zx = isWide ? splitLeft + width2/2 + 4 : x + hrZoneWidth;
+            var zy = isWide ? y + height - curHrSize[1] + 4 : y + 1;
+            font = isWide ? Graphics.FONT_MEDIUM : Graphics.FONT_SYSTEM_TINY;
+            var currentZone = hrZones.getCurrentBucket();
+            dc.setColor(hrZones.bucketColor[currentZone], backgroundColor);
+            dc.drawText(zx, zy, font, "Z" + (currentZone + 1), LEFT_BOTTOM);
+        }
     }
 
     function textOf(hr) {
         return hr > 0 ? hr.format("%d") : "_";
     }
+
+    function calculateSize(dc) {
+        x = 0;
+        width = dc.getWidth();
+        y = 0;
+        height = dc.getHeight();
+
+        width2 = width/2;
+        width23 = width*2/3;
+        isWide = width > 100; // wider than 100 pixels
+
+        obscurity = getObscurityFlags();
+        if (obscurity > 0) {
+            //System.println("obscurity is " + obscurity);
+            var wf = width * 0.1;
+            var hf = height * 0.1;
+            if ((obscurity & OBSCURE_LEFT) || (obscurity & OBSCURE_RIGHT)  > 0) {
+                x += wf;
+                width -= 2 * wf;
+                height -= 0.5 * hf;
+            }
+            if ((obscurity & OBSCURE_TOP) || (obscurity & OBSCURE_BOTTOM)  > 0) {
+                y += hf;
+                height -= 2 * hf;
+            }
+        }
+    }
+
 }
