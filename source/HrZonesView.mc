@@ -40,20 +40,6 @@ class HrZonesView extends WatchUi.DataField {
     }
 
     function onLayout(dc) {
-        if (hasBackgroundColorOption) {
-            backgroundColor = getBackgroundColor();
-            if (backgroundColor == Graphics.COLOR_BLACK) {
-                // night
-                textColor = Graphics.COLOR_WHITE;
-                unitColor = Graphics.COLOR_LT_GRAY;
-            } else {
-                // daylight
-                textColor = Graphics.COLOR_BLACK;
-                unitColor = 0x444444;
-            }
-        }
-        hrZones.textColor = textColor;
-
         calculateSize(dc);
         //System.println("size is [" + width + "," + height + "] wide = " + isWide);
 
@@ -76,6 +62,8 @@ class HrZonesView extends WatchUi.DataField {
     // Display the value you computed here. This will be called once a second when the data field is visible.
     // Resolution, WxH	200 x 265 pixels for both 520 and 820
     function onUpdate(dc) {
+        setupColors();
+
         // clear background
         dc.setColor(textColor, backgroundColor);
         dc.clear();
@@ -129,6 +117,22 @@ class HrZonesView extends WatchUi.DataField {
 
     function textOf(hr) {
         return hr > 0 ? hr.format("%d") : "_";
+    }
+
+    function setupColors() {
+        if (hasBackgroundColorOption) {
+            backgroundColor = getBackgroundColor();
+            if (backgroundColor == Graphics.COLOR_BLACK) {
+                // night
+                textColor = Graphics.COLOR_WHITE;
+                unitColor = Graphics.COLOR_LT_GRAY;
+            } else {
+                // daylight
+                textColor = Graphics.COLOR_BLACK;
+                unitColor = 0x444444;
+            }
+        }
+        hrZones.textColor = textColor;
     }
 
     function calculateSize(dc) {
