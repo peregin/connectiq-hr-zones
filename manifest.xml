@@ -7,8 +7,6 @@
             <iq:product id="edge_520"/>
             <iq:product id="fr735xt"/>
             <iq:product id="fr935"/>
-            <iq:product id="vivoactive3"/>
-            <iq:product id="vivoactive3m"/>
         </iq:products>
         <iq:permissions>
             <iq:uses-permission id="UserProfile"/>
