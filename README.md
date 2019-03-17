@@ -12,3 +12,5 @@ On the top of the screen it displays a histogram with the time spent in the five
 ![edge520](https://raw.github.com/peregin/connectiq-hr-zones/master/doc/edge520.png "edge850")
 &nbsp;
 ![fr735xt](https://raw.github.com/peregin/connectiq-hr-zones/master/doc/fr735xt.png "fr735xt")
+&nbsp;
+![gf935](https://raw.github.com/peregin/connectiq-hr-zones/master/doc/gf935.png "fr735xt")
