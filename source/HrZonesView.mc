@@ -104,7 +104,7 @@ class HrZonesView extends WatchUi.DataField {
         var hrZoneWidth = isWide ? width : width - zoneWidth;
         hrZones.draw(dc, x + 2, y + 1, hrZoneWidth, height - curHrSize[1] - 2);
 
-        // draw current zone
+        // draw current zone (when is not rounded)
         if (obscurity == 0) {
             var zx = isWide ? splitLeft + width2/2 + 4 : x + hrZoneWidth;
             var zy = isWide ? y + height - curHrSize[1] + 4 : y + 1;
