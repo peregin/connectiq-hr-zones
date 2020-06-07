@@ -31,10 +31,7 @@ class HrZonesView extends WatchUi.DataField {
         hasBackgroundColorOption = (self has :getBackgroundColor);
         System.println("has background color = " + hasBackgroundColorOption);
 
-        var age = HeartRate.getAge();
-        var maxHr = HeartRate.maxHr(age);
-        System.println("age is " + age + ", max HR is " + maxHr);
-        var thresholds = HeartRate.lowerThresholdsFor(maxHr);
+        var thresholds = HeartRate.calculateThresholds();
         HeartRate.printThresholds(thresholds);
         hrZones.setThresholds(thresholds);
     }
@@ -68,7 +65,7 @@ class HrZonesView extends WatchUi.DataField {
         dc.setColor(textColor, backgroundColor);
         dc.clear();
 
-        // current heart rate
+        // current heart rate, green if below average, orange if is above average
         var text = textOf(curHr);
         var font = Graphics.FONT_NUMBER_MILD;
         var curHrSize = dc.getTextDimensions(text, font);
@@ -110,8 +107,14 @@ class HrZonesView extends WatchUi.DataField {
             var zy = isWide ? y + height - curHrSize[1] + 4 : y + 1;
             font = isWide ? Graphics.FONT_MEDIUM : Graphics.FONT_SYSTEM_TINY;
             var currentZone = hrZones.getCurrentBucket();
-            dc.setColor(hrZones.bucketColor[currentZone], backgroundColor);
-            dc.drawText(zx, zy, font, "Z" + (currentZone + 1), LEFT_BOTTOM);
+            var zoneColor = Graphics.COLOR_BLACK;
+            var zoneText = "R";
+            if (currentZone >= 0) {
+            	zoneColor = hrZones.bucketColor[currentZone];
+            	zoneText = "Z" + (currentZone + 1);
+            }
+            dc.setColor(zoneColor, backgroundColor);
+            dc.drawText(zx, zy, font, zoneText, LEFT_BOTTOM);
         }
     }
 

@@ -5,8 +5,9 @@ using Toybox.Graphics;
  */
 class Histogram5 {
 
-    // generic for heart rate (0 -> [0, 120], 1 -> [120, 140], ...)
-    hidden var bucketMinThreshold = [0, 120, 140, 160, 180];
+    // generic for heart rate (20 -> [20, 120], 1 -> [120, 140], ...)
+    // 0 -> -1 means rest zone
+    hidden var bucketMinThreshold = [20, 120, 140, 160, 180];
     hidden var secondsInBucket = [0, 0, 0, 0, 0];
     // TODO: test data, comment it out!!!
     //hidden var secondsInBucket = [30, 50, 60, 40, 10];
@@ -31,7 +32,9 @@ class Histogram5 {
     function add(value) {
         curValue = value;
         curBucket = getBucketFor(curValue);
-        secondsInBucket[curBucket] += 1;
+        if (curBucket >= 0) {
+        	secondsInBucket[curBucket] += 1;
+        }
     }
 
     function getCurrentBucket() {
@@ -40,8 +43,8 @@ class Histogram5 {
 
     // bucket value is a range betwen 0 -> 4
     function getBucketFor(value) {
-        if (value <= bucketMinThreshold[0]) {
-            return 0;
+        if (value < bucketMinThreshold[0]) {
+            return -1; // means less than the minimal threshold => is the rest zone
         }
         var bucket = 0;
         while (bucket < bucketMinThreshold.size() && value >= bucketMinThreshold[bucket]) {

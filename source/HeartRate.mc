@@ -4,6 +4,9 @@ using Toybox.Time;
 using Toybox.System;
 
 /**
+ * Try first from Garmin setup: Select > My Stats > Training Zones > Heart Rate Zones
+ *
+ * Otherwise use the formula from below:
  *
  * https://healthiack.com/heart-rate-zone-calculator#calculator
  * Various formulas (standard, Miller, Londeree):
@@ -17,26 +20,34 @@ using Toybox.System;
  */
 class HeartRate {
 
-    static function getAge() {
-        // use age to calculate max HR or make it editable for this data field.
-        var profile = UserProfile.getProfile();
-        if (profile != null) {
-            return Gregorian.info(Time.now(), Time.FORMAT_SHORT).year - profile.birthYear;
-        } else {
-            return 40;
+    static function calculateThresholds() {
+      	var profile = UserProfile.getProfile();
+      	if (profile != null) {
+      		var garminThresholds = profile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
+      		if (garminThresholds != null && garminThresholds.size() >= 5) {
+      			System.println("using Garmin setup");
+      			return garminThresholds.slice(0, 5);
+      		} else {
+      			// calculate the age from the profile
+      			var age = Gregorian.info(Time.now(), Time.FORMAT_SHORT).year - profile.birthYear;
+      			return thresholdsFromAge(age);
+      		}
+      	} else {
+      	    // average for 40 years old
+        	return thresholdsFromAge(40);
+      	}
+    }
+    
+    static function printThresholds(thresholds) {
+        for (var i = 0; i < thresholds.size(); i++) {
+           System.println("zone[" + (i+1) + "]=" + thresholds[i]);
         }
     }
-
-    static function maxHr(age) {
-        return 220 - age;
-    }
-
-    private static function threshold(age, factor) {
-        return (age * factor).toLong();
-    }
-
-    static function lowerThresholdsFor(maxHr) {
-        var lowerThreshold = [
+    
+    private static function thresholdsFromAge(age) {
+    	var maxHr = 220 - age;
+    	System.println("age is " + age + ", max HR is " + maxHr);
+    	var lowerThreshold = [
             0,
             threshold(maxHr, 0.59),
             threshold(maxHr, 0.78),
@@ -44,11 +55,10 @@ class HeartRate {
             threshold(maxHr, 0.96)
         ];
         return lowerThreshold;
+    	
     }
 
-    static function printThresholds(thresholds) {
-        for (var i = 0; i < thresholds.size(); i++) {
-           System.println("zone[" + (i+1) + "]=" + thresholds[i]);
-        }
+    private static function threshold(value, factor) {
+        return (value * factor).toLong();
     }
 }
