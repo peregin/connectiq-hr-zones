@@ -10,6 +10,13 @@ using Toybox.Application;
  * Resolution: 200px x 265px
  * 16-bit Color Display
  *
+ * Garmin Edge 830
+ * ---------------
+ * Screen Size: 2.6"
+ * Resolution: 246px x 322px
+ * 16-bit Color Display
+ *
+ *
  * Garmin Forerunner 735XT
  * -----------------------
  * Resolution: 215px x 185px
