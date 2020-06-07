@@ -34,7 +34,7 @@ class HrZonesView extends WatchUi.DataField {
         var age = HeartRate.getAge();
         var maxHr = HeartRate.maxHr(age);
         System.println("age is " + age + ", max HR is " + maxHr);
-        var thresholds = HeartRate.lowerThresholdsForAge(maxHr);
+        var thresholds = HeartRate.lowerThresholdsFor(maxHr);
         HeartRate.printThresholds(thresholds);
         hrZones.setThresholds(thresholds);
     }
@@ -85,7 +85,7 @@ class HrZonesView extends WatchUi.DataField {
 
         // average heart rate
         text = textOf(avgHr);
-        font = Graphics.FONT_MEDIUM;
+        font = Graphics.FONT_SMALL;
         dc.setColor(textColor, backgroundColor);
         dc.drawText(splitRight + 2, y + height - curHrSize[1] + 4, font, text, LEFT_BOTTOM);
 
@@ -100,7 +100,7 @@ class HrZonesView extends WatchUi.DataField {
             zoneWidth = unitSize[0];
         }
 
-        // draw the historgram
+        // draw the histogram
         var hrZoneWidth = isWide ? width : width - zoneWidth;
         hrZones.draw(dc, x + 2, y + 1, hrZoneWidth, height - curHrSize[1] - 2);
 
@@ -143,7 +143,7 @@ class HrZonesView extends WatchUi.DataField {
 
         width2 = width/2;
         width23 = width*2/3;
-        isWide = width > 100; // wider than 100 pixels
+        isWide = width > 150; // wider than 150 pixels
 
         obscurity = getObscurityFlags();
         if (obscurity > 0) {

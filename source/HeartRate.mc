@@ -31,11 +31,11 @@ class HeartRate {
         return 220 - age;
     }
 
-    static function threshold(age, factor) {
+    private static function threshold(age, factor) {
         return (age * factor).toLong();
     }
 
-    static function lowerThresholdsForAge(maxHr) {
+    static function lowerThresholdsFor(maxHr) {
         var lowerThreshold = [
             0,
             threshold(maxHr, 0.59),
