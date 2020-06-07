@@ -119,7 +119,7 @@ class HrZonesView extends WatchUi.DataField {
     }
 
     function textOf(hr) {
-        return hr > 0 ? hr.format("%d") : "_";
+        return hr > 0 ? hr.format("%d") : "--";
     }
 
     function setupColors() {

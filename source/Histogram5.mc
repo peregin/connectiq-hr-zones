@@ -20,7 +20,7 @@ class Histogram5 {
     ];
 
     hidden var curValue = 0;
-    hidden var curBucket = 0;
+    hidden var curBucket = -1;
 
     var textColor = Graphics.COLOR_BLACK;
 
