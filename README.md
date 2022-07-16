@@ -14,3 +14,20 @@ On the top of the screen it displays a histogram with the time spent in the five
 ![fr735xt](https://raw.github.com/peregin/connectiq-hr-zones/master/doc/fr735xt.png "fr735xt")
 &nbsp;
 ![gf935](https://raw.github.com/peregin/connectiq-hr-zones/master/doc/gf935.png "fr735xt")
+&nbsp;
+![explorer2](https://raw.github.com/peregin/connectiq-hr-zones/master/doc/explorer2.png "explorer2")
+
+Build
+=====
+
+Package
+---
+Build package ready to deploy to Garmin App store.
+```shell
+make package
+```
+
+Manual Deployment
+---
+
+Copy the prg file over the `/GARMIN/APPS/` folder.

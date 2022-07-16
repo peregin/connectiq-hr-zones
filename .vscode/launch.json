@@ -1,7 +1,4 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
@@ -21,6 +18,11 @@
             "prgDebugXml": "${workspaceFolder}${pathSeparator}bin${pathSeparator}test_${command:GetTargetDevice}_${workspaceFolderBasename}.prg.debug.xml",
             "runTests": true,
             "device": "${command:GetTargetDevice}"
+        },
+        {
+            "name": "Run App",
+            "request": "launch",
+            "type": "monkeyc"
         }
     ]
 }
