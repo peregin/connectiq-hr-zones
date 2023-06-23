@@ -20,25 +20,30 @@ using Toybox.System;
  */
 class HeartRate {
 
-    static function calculateThresholds() {
+    static function calculateThresholds() as Toybox.Lang.Array<Toybox.Lang.Number> {
+        var zoneInfo = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_BIKING);
+        if (zoneInfo != null && zoneInfo.size() >= 5) {
+            System.println("biking zone profile");
+            return zoneInfo;
+        }
+        zoneInfo = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
+        if (zoneInfo != null && zoneInfo.size() >= 5) {
+            System.println("generic zone profile");
+            return zoneInfo;
+        }
       	var profile = UserProfile.getProfile();
       	if (profile != null) {
-      		var garminThresholds = profile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
-      		if (garminThresholds != null && garminThresholds.size() >= 5) {
-      			System.println("using Garmin setup");
-      			return garminThresholds.slice(0, 5);
-      		} else {
-      			// calculate the age from the profile
-      			var age = Gregorian.info(Time.now(), Time.FORMAT_SHORT).year - profile.birthYear;
-      			return thresholdsFromAge(age);
-      		}
-      	} else {
-      	    // average for 40 years old
-        	return thresholdsFromAge(40);
-      	}
+            // calculate the age from the profile
+            System.println("age from user profile");
+      		var age = Gregorian.info(Time.now(), Time.FORMAT_SHORT).year - profile.birthYear;
+      		return thresholdsFromAge(age);
+        }
+        // average for 40 years old
+        System.println("age 40 user profile");
+     	return thresholdsFromAge(40);
     }
     
-    static function printThresholds(thresholds) {
+    static function printThresholds(thresholds as Toybox.Lang.Array<Toybox.Lang.Number>) {
         for (var i = 0; i < thresholds.size(); i++) {
            System.println("zone[" + (i+1) + "]=" + thresholds[i]);
         }

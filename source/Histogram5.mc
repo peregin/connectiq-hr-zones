@@ -7,14 +7,14 @@ class Histogram5 {
 
     // generic for heart rate (20 -> [20, 120], 1 -> [120, 140], ...)
     // 0 -> -1 means rest zone
-    hidden var bucketMinThreshold = [20, 120, 140, 160, 180];
-    hidden var secondsInBucket = [0, 0, 0, 0, 0];
+    hidden var bucketMinThreshold as Toybox.Lang.Array<Toybox.Lang.Number> = [20, 120, 140, 160, 180];
+    hidden var secondsInBucket as Toybox.Lang.Array<Toybox.Lang.Number> = [0, 0, 0, 0, 0];
     // TODO: test data, comment it out!!!
     //hidden var secondsInBucket = [30, 50, 60, 40, 10];
-    var bucketColor = [
+    var bucketColor as Toybox.Lang.Array<Toybox.Lang.Number> = [
+        Graphics.COLOR_DK_GRAY,
         Graphics.COLOR_BLUE,
         Graphics.COLOR_DK_GREEN,
-        Graphics.COLOR_YELLOW,
         Graphics.COLOR_ORANGE,
         Graphics.COLOR_RED
     ];
@@ -42,7 +42,7 @@ class Histogram5 {
     }
 
     // bucket value is a range betwen 0 -> 4
-    function getBucketFor(value) {
+    function getBucketFor(value) as Toybox.Lang.Number {
         if (value < bucketMinThreshold[0]) {
             return -1; // means less than the minimal threshold => is the rest zone
         }
